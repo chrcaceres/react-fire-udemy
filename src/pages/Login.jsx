@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { login } from "../config/firebase";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { Avatar, Box, Button, TextField, Typography } from "@mui/material";
+import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
+import { LoadingButton } from "@mui/lab";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -71,8 +74,22 @@ const Login = () => {
     });
 
     return (
-        <>
-            <h1>Login</h1>
+        <Box
+            sx={{
+                mt: 8,
+                maxWidth: "400px",
+                mx: "auto",
+                textAlign: "center",
+            }}
+        >
+            <Avatar sx={{ mx: "auto", bgcolor: "#111" }}>
+                <AddAPhotoIcon></AddAPhotoIcon>
+            </Avatar>
+
+            <Typography variant="h5" component="h1">
+                Login
+            </Typography>
+
             <Formik
                 initialValues={{ email: "", password: "" }}
                 onSubmit={onSubmit}
@@ -87,32 +104,65 @@ const Login = () => {
                     handleBlur,
                     isSubmitting,
                 }) => (
-                    <form onSubmit={handleSubmit}>
-                        <input
+                    <Box
+                        sx={{ mt: 1 }}
+                        component="form"
+                        onSubmit={handleSubmit}
+                    >
+                        <TextField
                             type="text"
-                            placeholder="Ingrese email"
+                            placeholder="email@example.com"
                             value={values.email}
                             onChange={handleChange}
                             name="email"
                             onBlur={handleBlur}
-                        ></input>
-                        {errors.email && touched.email && errors.email}
-                        <input
+                            id="email"
+                            label="Ingrese email"
+                            fullWidth
+                            sx={{ mb: 3 }}
+                            error={errors.email && touched.email}
+                            helperText={
+                                errors.email && touched.email && errors.email
+                            }
+                        ></TextField>
+
+                        <TextField
                             type="password"
-                            placeholder="Ingrese contraseña"
+                            placeholder="123123"
                             value={values.password}
                             onChange={handleChange}
                             name="password"
                             onBlur={handleBlur}
-                        ></input>
-                        {errors.password && touched.password && errors.password}
-                        <button type="submit" disabled={isSubmitting}>
+                            id="password"
+                            label="Ingrese contraseña"
+                            fullWidth
+                            sx={{ mb: 3 }}
+                            error={errors.password && touched.password}
+                            helperText={
+                                errors.password &&
+                                touched.password &&
+                                errors.password
+                            }
+                        ></TextField>
+
+                        <LoadingButton
+                            type="submit"
+                            disabled={isSubmitting}
+                            loading={isSubmitting}
+                            variant="contained"
+                            fullWidth
+                            sx={{ mb: 3 }}
+                        >
                             Login
-                        </button>
-                    </form>
+                        </LoadingButton>
+
+                        <Button fullWidth component={Link} to="/register">
+                            ¿No tienes cuenta? Regístrate
+                        </Button>
+                    </Box>
                 )}
             </Formik>
-        </>
+        </Box>
     );
 };
 
